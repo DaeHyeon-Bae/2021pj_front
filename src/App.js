@@ -2,6 +2,7 @@ import './App.css';
 import Button from '@mui/material/Button';
 import {TextField} from '@mui/material';
 import {useState} from 'react';
+import userHandler from './handler/user';
 
 function App() {
 
@@ -11,20 +12,13 @@ function App() {
   const [userPW, setUserPW] = useState('');
 
   const onClickUserRegist = async () =>{
-    const reg = await fetch('http://localhost:4000/users',{
-                  method: 'post',
-                  headers: {
-                    'Content-type': 'application/json'
-                  },
-                  body: JSON.stringify({
-                    "user_nm": userName,
-                    "user_desc": userDesc,
-                    "user_login_id": userID,
-                    "user_login_pw": userPW
-                  })
-    });
-    alert(userName+" "+userDesc+" "+userID);
-    return reg;
+    console.log(userName, userDesc,  userID, userPW);
+
+    if(await userHandler.create({userName,userDesc,userID,userPW})){
+      alert("회원가입 성공");
+    }else{
+      alert("회원가입 실패");
+    }
   }
 
   return (
@@ -59,7 +53,7 @@ function App() {
       <div>
       <Button variant="contained"
               fullWidth
-              onClick={()=>onClickUserRegist()}
+              onClick={onClickUserRegist}
               >회원가입</Button>
       </div>
       
